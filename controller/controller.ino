@@ -14,7 +14,7 @@ void setup() {
   pinMode(alertLedPin, OUTPUT);
   digitalWrite(alertLedPin, HIGH);
 
-  Serial.begin(115200);
+  setupSerial();
   setupMoistureSensor();
   setupPump();
   setupProcessing();

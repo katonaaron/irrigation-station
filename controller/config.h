@@ -28,3 +28,13 @@ int moistureTreshold = maxValue / 2; // 50%
 long sensorReactionTime = 10 * 1000; //30 s
 long pumpTime = 1 * 1000; //ms
 long delayBetweenChecks = 5000; //ms
+
+//==============================
+// Constants
+//==============================
+
+const int nrPlants = 1;
+
+// Serial communication
+const long baudRate = 115200;
+const int serialCommandLength = 20; 

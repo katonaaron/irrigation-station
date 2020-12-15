@@ -5,7 +5,10 @@ void setupProcessing() {
 void controlMoistureLevel() {
   int moistureValue = readMoistureValue();
 
-  Serial.println(String("moistureValue: ") +  moistureValue + "\tmoistureTreshold: " + moistureTreshold);
+  Serial.print("moistureValue: ");
+  Serial.print(moistureValue );
+  Serial.print("\tmoistureTreshold: ");
+  Serial.println(moistureTreshold);
 
   if (moistureValueToPercentage(moistureValue) < moistureValueToPercentage(moistureTreshold)) {
     startPump();
