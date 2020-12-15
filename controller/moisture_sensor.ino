@@ -1,12 +1,6 @@
 const int addrMaxVal = 0;
 const int addrMinVal = addrMaxVal + sizeof(int);
 
-const int nrMeasurements = 10; // per a single reading
-
-volatile int maxValue = -1;
-volatile int minValue = -1;
-
-
 void setupMoistureSensor() {
   // Set analog reference to 3.3V (external)
   analogReference(EXTERNAL);

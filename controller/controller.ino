@@ -1,5 +1,10 @@
+#include <Timer.h>
 #include <EEPROM.h>
+
 #include "config.h"
+#include "SensorData.h"
+
+Timer t;
 
 // suspend execution
 volatile bool suspend = false;
@@ -11,6 +16,8 @@ void setup() {
 
   Serial.begin(115200);
   setupMoistureSensor();
+  setupPump();
+  setupProcessing();
   setupInterrupts();
   
   // Show that setup is over
@@ -19,19 +26,22 @@ void setup() {
 }
 
 void loop() {
-
   if(suspend) {
     return;
   }
 
-  int soilMoistureValue = readMoistureValue();
-  int soilMoisturePercentage = moistureValueToPercentage(soilMoistureValue);
+  t.update();
 
-  Serial.print("Sensor value: ");
-  Serial.print(soilMoistureValue);
-  Serial.print(" Precentage: ");
-  Serial.print(soilMoisturePercentage);
-  Serial.println(" %");
+//  int soilMoistureValue = readMoistureValue();
+//  int soilMoisturePercentage = moistureValueToPercentage(soilMoistureValue);
+//
+//  Serial.print("Sensor value: ");
+//  Serial.print(soilMoistureValue);
+//  Serial.print(" Precentage: ");
+//  Serial.print(soilMoisturePercentage);
+//  Serial.println(" %");
+//
+//  delay(1000);
 
-  delay(1000);
+  
 }
