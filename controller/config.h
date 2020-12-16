@@ -1,11 +1,13 @@
+#include "secrets.h"
+
 //==============================
 // Pins
 //==============================
 
 // Moisture sensor
 const int moistureSensorPin = A0;
-const int configMaxIntPin = 18;
-const int configMinIntPin = 19;
+const int configMaxIntPin = 2;
+const int configMinIntPin = 3;
 
 // LEDs
 const int alertLedPin = 12;
@@ -38,3 +40,11 @@ const int nrPlants = 1;
 // Serial communication
 const long baudRate = 115200;
 const int serialCommandLength = 20; 
+
+// WiFi
+const char ssid[] = SECRET_SSID;           
+const char pass[] = SECRET_PASS;
+const int port = 80;
+
+// The size of the circular buffer storing (partially) the HTTP request
+const int http_buffer_size = 4;

@@ -1,8 +1,10 @@
+#include <WiFiEsp.h>
 #include <Timer.h>
 #include <EEPROM.h>
 
 #include "config.h"
-#include "SensorData.h"
+#include "error.h"
+#include "http.h"
 
 Timer t;
 
@@ -14,10 +16,11 @@ void setup() {
   pinMode(alertLedPin, OUTPUT);
   digitalWrite(alertLedPin, HIGH);
 
-  setupSerial();
+  Serial.begin(baudRate);
   setupMoistureSensor();
   setupPump();
   setupProcessing();
+  setupWifi();
   setupInterrupts();
   
   // Show that setup is over
@@ -30,18 +33,7 @@ void loop() {
     return;
   }
 
-  t.update();
+  receiveClients();
 
-//  int soilMoistureValue = readMoistureValue();
-//  int soilMoisturePercentage = moistureValueToPercentage(soilMoistureValue);
-//
-//  Serial.print("Sensor value: ");
-//  Serial.print(soilMoistureValue);
-//  Serial.print(" Precentage: ");
-//  Serial.print(soilMoisturePercentage);
-//  Serial.println(" %");
-//
-//  delay(1000);
-
-  
+  //t.update();
 }
