@@ -1,6 +1,7 @@
-#include <WiFiEsp.h>
 #include <Timer.h>
+#include <ShiftRegister74HC595.h>
 #include <EEPROM.h>
+#include <WiFiEsp.h>
 
 #include "config.h"
 #include "error.h"
@@ -13,8 +14,7 @@ volatile bool suspend = false;
 
 void setup() {
   // Show that setup is going on
-  pinMode(alertLedPin, OUTPUT);
-  digitalWrite(alertLedPin, HIGH);
+  displayCharacters("SE");
 
   Serial.begin(baudRate);
   setupMoistureSensor();
@@ -22,18 +22,14 @@ void setup() {
   setupProcessing();
   setupWifi();
   setupInterrupts();
-  
-  // Show that setup is over
-  if(!suspend)
-    digitalWrite(alertLedPin, LOW);
 }
 
 void loop() {
-  if(suspend) {
+  if (suspend) {
     return;
   }
 
   receiveClients();
 
-  //t.update();
+  t.update();
 }

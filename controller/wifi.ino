@@ -16,7 +16,7 @@ void setupWifi() {
 
   // connect to WiFI AP
   if (WiFi.begin(ssid, pass) != WL_CONNECTED) {
-    setError(NO_CONNECTION);
+    setError(NO_WIFI_CONNECTION);
     return;
   }
 

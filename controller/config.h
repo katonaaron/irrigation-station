@@ -6,14 +6,19 @@
 
 // Moisture sensor
 const int moistureSensorPin = A0;
-const int configMaxIntPin = 2;
-const int configMinIntPin = 3;
+const int configMaxIntPin = 3;
+const int configMinIntPin = 2;
 
 // LEDs
 const int alertLedPin = 12;
 
 // Pump
 const int pumpPin = 11;
+
+// Display
+const int dispSDI = 7;
+const int dispSCLK = 6;
+const int dispLOAD = 5;
 
 //==============================
 // Parameters - Default values
@@ -30,12 +35,16 @@ int moistureTreshold = maxValue / 2; // 50%
 long sensorReactionTime = 10 * 1000; //30 s
 long pumpTime = 1 * 1000; //ms
 long delayBetweenChecks = 5000; //ms
+long displayRefreshPeriod = 1000; //ms
 
 //==============================
 // Constants
 //==============================
 
 const int nrPlants = 1;
+
+// Display
+const int dispDigits = 2;
 
 // Serial communication
 const long baudRate = 115200;
