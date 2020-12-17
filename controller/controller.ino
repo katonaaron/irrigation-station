@@ -1,7 +1,7 @@
 #include <Timer.h>
 #include <ShiftRegister74HC595.h>
-#include <EEPROM.h>
 #include <WiFiEsp.h>
+#include <EEPROMex.h>
 
 #include "config.h"
 #include "error.h"
@@ -17,6 +17,8 @@ void setup() {
   displayCharacters("SE");
 
   Serial.begin(baudRate);
+  loadSettings();
+  printSettings();
   setupMoistureSensor();
   setupPump();
   setupProcessing();

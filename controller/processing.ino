@@ -1,6 +1,6 @@
 void setupProcessing() {
-  t.after(delayBetweenChecks, controlMoistureLevel);
-  t.every(displayRefreshPeriod, displayMoisturePercentage);
+  t.after(settings.delayBetweenChecks, controlMoistureLevel);
+  t.every(settings.displayRefreshPeriod, displayMoisturePercentage);
 }
 
 void controlMoistureLevel() {
@@ -8,20 +8,20 @@ void controlMoistureLevel() {
   
   Serial.print("moistureValue: ");
   Serial.print(moistureValue );
-  Serial.print("\tmoistureTreshold: ");
-  Serial.println(moistureTreshold);
+  Serial.print("\ttresholdValue: ");
+  Serial.println(settings.tresholdValue);
 
-  if (moistureValueToPercentage(moistureValue) < moistureValueToPercentage(moistureTreshold)) {
+  if (moistureValueToPercentage(moistureValue) < moistureValueToPercentage(settings.tresholdValue)) {
     startPump();
-    t.after(pumpTime, stopPumpAndWaitForSensorReaction);
+    t.after(settings.pumpingTime, stopPumpAndWaitForSensorReaction);
   } else {
-    t.after(delayBetweenChecks, controlMoistureLevel);
+    t.after(settings.delayBetweenChecks, controlMoistureLevel);
   }
 }
 
 void stopPumpAndWaitForSensorReaction() {
   stopPump();
-  t.after(sensorReactionTime, controlMoistureLevel);
+  t.after(settings.sensorReactionTime, controlMoistureLevel);
 }
 
 void displayMoisturePercentage() {

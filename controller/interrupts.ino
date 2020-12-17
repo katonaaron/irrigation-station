@@ -20,7 +20,6 @@ void configMaxValue() {
   {
     Serial.println("Interrupted: configMaxValue");
     readAndSaveMaxValue();
-    checkMaxAndMinValues();
   }
 
   last_interrupt_time = interrupt_time;
@@ -36,7 +35,6 @@ void configMinValue() {
   {
     Serial.println("Interrupted: configMinValue");
     readAndSaveMinValue();
-    checkMaxAndMinValues();
   }
 
   last_interrupt_time = interrupt_time;
