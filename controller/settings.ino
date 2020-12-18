@@ -24,12 +24,12 @@ void printSettings() {
   Serial.println(settings.version);
   Serial.print("\tnrMeasurements: ");
   Serial.println(settings.nrMeasurements);
-  Serial.print("\tmaxValue: ");
-  Serial.println(settings.maxValue);
-  Serial.print("\tminValue: ");
-  Serial.println(settings.minValue);
-  Serial.print("\ttresholdValue: ");
-  Serial.println(settings.tresholdValue);
+  Serial.print("\tdryValue: ");
+  Serial.println(settings.dryValue);
+  Serial.print("\twetValue: ");
+  Serial.println(settings.wetValue);
+  Serial.print("\ttresholdPercentage: ");
+  Serial.println(settings.tresholdPercentage);
   Serial.print("\tsensorReactionTime: ");
   Serial.println(settings.sensorReactionTime);
   Serial.print("\tpumpingTime: ");

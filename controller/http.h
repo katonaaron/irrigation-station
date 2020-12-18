@@ -5,7 +5,8 @@ enum HttpStatus {
   OK = 200,
   BAD_REQUEST = 400,
   NOT_FOUND = 404,
-  METHOD_NOT_ALLOWED = 405
+  METHOD_NOT_ALLOWED = 405,
+  UNPROCESSABLE_ENTITY = 422
 };
 
 const char* httpStatusToStr(enum HttpStatus httpStatus) {
@@ -18,6 +19,8 @@ const char* httpStatusToStr(enum HttpStatus httpStatus) {
       return "404 Not Found";
     case METHOD_NOT_ALLOWED:
       return "405 Method Not Allowed";
+    case UNPROCESSABLE_ENTITY:
+      return "422 Unprocessable Entity";
     default: 
       return "";
   }

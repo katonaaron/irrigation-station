@@ -2,6 +2,7 @@
 #include <ShiftRegister74HC595.h>
 #include <WiFiEsp.h>
 #include <EEPROMex.h>
+#include <ArduinoJson.h>
 
 #include "config.h"
 #include "error.h"

@@ -4,14 +4,14 @@ void setupProcessing() {
 }
 
 void controlMoistureLevel() {
-  int moistureValue = readMoistureValue();
-  
-  Serial.print("moistureValue: ");
-  Serial.print(moistureValue );
-  Serial.print("\ttresholdValue: ");
-  Serial.println(settings.tresholdValue);
+  int moisturePercentage = moistureValueToPercentage(readMoistureValue());
 
-  if (moistureValueToPercentage(moistureValue) < moistureValueToPercentage(settings.tresholdValue)) {
+  Serial.print("moisturePercentage: ");
+  Serial.print(moisturePercentage );
+  Serial.print("\ttresholdPercentage: ");
+  Serial.println(settings.tresholdPercentage);
+
+  if (moisturePercentage < settings.tresholdPercentage) {
     startPump();
     t.after(settings.pumpingTime, stopPumpAndWaitForSensorReaction);
   } else {

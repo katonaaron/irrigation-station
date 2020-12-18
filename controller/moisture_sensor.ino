@@ -3,13 +3,13 @@ void setupMoistureSensor() {
   analogReference(EXTERNAL);
 }
 
-void readAndSaveMaxValue() {
-  settings.maxValue = readMoistureValue();
+void readAndSaveDryValue() {
+  settings.dryValue = readMoistureValue();
   saveSettings();
 }
 
-void readAndSaveMinValue() {
-  settings.minValue = readMoistureValue();
+void readAndSaveWetValue() {
+  settings.wetValue = readMoistureValue();
   saveSettings();
 }
 
@@ -24,5 +24,13 @@ int readMoisturePercentage() {
 }
 
 int moistureValueToPercentage(int value) {
-  return map(value, settings.minValue, settings.maxValue, 100, 0);
+  return map(value, settings.wetValue, settings.dryValue, 100, 0);
+}
+
+int percentageToMoistureValue(int percentage) {
+  return map(percentage, 100, 0, settings.wetValue, settings.dryValue);
+}
+
+float moistureValueToVoltage(int value) {
+  return map(value, 0, 1023, 0, 33) / 10.0f;
 }

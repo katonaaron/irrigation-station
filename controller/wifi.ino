@@ -61,7 +61,7 @@ void receiveClients() {
 
         // printing the stream to the serial monitor will slow down
         // the receiving of data from the ESP filling the serial buffer
-        //Serial.write(c);
+        // Serial.write(c);
 
         // end of the HTTP request
         if (buf.endsWith("\r\n\r\n")) {

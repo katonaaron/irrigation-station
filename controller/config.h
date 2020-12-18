@@ -10,12 +10,12 @@ const int configMaxIntPin = 3;
 const int configMinIntPin = 2;
 
 // Pump
-const int pumpPin = 12;
+const int pumpPin = 5;
 
 // Display
-const int dispSDI = 7;
-const int dispSCLK = 6;
-const int dispLOAD = 5;
+const int dispSDI = 8;
+const int dispSCLK = 7;
+const int dispLOAD = 6;
 
 //==============================
 // Constants
@@ -38,14 +38,17 @@ const int port = 80;
 // The size of the circular buffer storing (partially) the HTTP request
 const int http_buffer_size = 4;
 
+#define MAX_SENSOR_VAL 930 // 3V
+#define MIN_SENSOR_VAL 0 // 0V
+
 
 //================================
 // User adjustable settings
 //================================
 
 
-#define SETTINGS_VERSION "v01"
-#define SETTINGS_ADDR 32
+#define SETTINGS_VERSION "v02"
+#define SETTINGS_ADDR 0
 
 
 typedef struct {
@@ -55,12 +58,12 @@ typedef struct {
   int nrMeasurements = 10; // per a single reading
   
   // Sensor readings
-  volatile int maxValue = 930; // 3V
-  volatile int minValue = 0; // 0V
-  int tresholdValue = maxValue + 1; // disable watering
+  volatile int dryValue = MAX_SENSOR_VAL; // 3V
+  volatile int wetValue = MIN_SENSOR_VAL; // 0V
+  int tresholdPercentage = 0; // disable watering
   
   // Moisture controller timings
-  long sensorReactionTime = 10 * 1000; //30 s
+  long sensorReactionTime = 10 * 1000; //10 s
   long pumpingTime = 1 * 1000; //ms
   long delayBetweenChecks = 5000; //ms
   long displayRefreshPeriod = 1000; //ms

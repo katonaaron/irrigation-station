@@ -19,7 +19,7 @@ void configMaxValue() {
   if (interrupt_time - last_interrupt_time > debounceTime && interruptPinValue == 0)
   {
     Serial.println("Interrupted: configMaxValue");
-    readAndSaveMaxValue();
+    readAndSaveDryValue();
   }
 
   last_interrupt_time = interrupt_time;
@@ -34,7 +34,7 @@ void configMinValue() {
   if (interrupt_time - last_interrupt_time > debounceTime && interruptPinValue == 0)
   {
     Serial.println("Interrupted: configMinValue");
-    readAndSaveMinValue();
+    readAndSaveWetValue();
   }
 
   last_interrupt_time = interrupt_time;
