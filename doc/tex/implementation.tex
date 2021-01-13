@@ -1,0 +1,63 @@
+\chapter{Proposed solution and Implementation} 
+
+\section{Chosen solution}
+
+The following decisions and use cases were considered:
+
+\begin{itemize}
+ \item The subjects of the irrigation are indoor plants.
+ \item The water source is a bucket.
+ \item The controller is implemented using an Arduino Mega microcontroller.
+ \item The controller must be calibrated for each plant: one must measure the moisture in the soil in both extreme cases.
+ \item The user can configure the controller parameters: e.g. the threshold moisture level.
+ \item The configuration interface is a REST web server, hosted on a ESP8266 Wi-Fi shield with the AT firmware.
+\end{itemize}
+
+The following features were also included in the system:
+
+\begin{itemize}
+ \item Persisting the configuration parameters in EEPROM
+ \item Allowing the user to set the extreme values by pressing buttons
+ \item Displaying the moisture percentage or eventual errors on a seven segment display
+\end{itemize}
+
+
+
+
+
+
+\section{Algorithms}
+
+\subsection{Controlling the moisture level}
+\label{sec:control_fsm}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{img/Irrigation station controller state diagram.png}
+    \caption{The state diagram of the moisture level controller}
+    \label{fig:controller_state_diagram}
+\end{figure}
+
+The controller can be considered as a state machine (figure \ref{fig:controller_state_diagram})  which changes states based on the sensor readings and on the timing parameters configured by the user.
+
+In the \textbf{idle state} the controller waits. The \verb|delayBetweenChecks| parameter specifies the duration the controller stays in this state. After that it moves to the verification state.
+
+In the \textbf{verification state} the sensor value is read, converted to percentage based on the saved extreme values, and  finally, it is compared with the threshold value. In case it is lower, the pumping state follows, in the other case the controller moves back to the idle state.
+
+In the \textbf{pumping state} the pump is enabled and the water flows from the tank to the plant. The duration of pumping is given by the \verb|pumpingTime| parameter. After that it moves to the waiting state.
+
+In the \textbf{waiting state} the controller waits for the sensor to react to the water flowing from the pump. The duration is given by the \verb|sensorReactionTime| parameter. Then it moves to the verification state.
+
+\subsection{Parsing HTTP requests byte-by-byte}
+\label{sec:http_fsm}
+
+From the HTTP requests only the request type and the endpoint are considered, the rest is ignored. Therefore another state machine was used which reads the characters from the Wi-Fi module, and saves only these two strings into separate variables. The state transitions happen on reading the \verb|' '| character.
+
+
+
+
+
+\section{Implementation}
+
+\input{tex/hardware}
+\input{tex/software}

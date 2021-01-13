@@ -1,0 +1,121 @@
+\chapter{Bibliographic research} 
+
+As described in chapter \ref{sec:not_new}, there are already solution for the given problem, however each implementation must be tailored to the specific use cases.
+
+
+
+
+\section{Controller}
+
+For controlling the moister level by reading a sensor value and activating  a pump the following approaches were observed:
+
+\subsection{Operational amplifier based} 
+
+A reference voltage is set to the desired value. The other input of the amplifier is connected to the sensor output. The amplifier saturates the value to 0V or 5V based on the result of comparison between the two voltages. The output of the amplifier enables the water pump.
+
+\subsection{Microcontroller based}
+
+The comparison of the two voltages can be done by the program running on the microcontroller. It can also activate the enable signal for the pump. 
+
+\subsection{Mixed}
+
+The two methods can be mixed: the microcontroller can set the reference value, and the operational amplifier can compare it with the sensor value and trigger the pump.
+
+
+\subsection{Comparison}
+
+The operational amplifier approach is really cheap and robust. However it lacks the support for setting up the reference value remotely. 
+
+The microcontroller is more expensive, and less reliable, because of the programming errors that might occur. Moreover because of the delay between two successful verifications the reaction time is greater than for the other approach. However the advantage is that the microcontroller can delay some processes e.g. sensor verification, time between successive pumps. This can be useful in a real application.
+
+The mixed solution seems to be ideal from a functional point of view, because this way the reference value can be changed remotely by the user, and the controlling part is ``bug-free'' and responsive. This approach's cost is the sum of the costs of the previous two methods.
+
+\section{Water source}
+
+\subsection{Water tank}
+
+One could store the water in a tank or a bucket. In this approach a water pump transmits the water from the tank to the plant. This method is ideal for indoor plants. However the user must take care of the refilling of the water tank.
+
+\subsection{Pipes}
+
+One could connect the irrigation system to the water pipe network of its home. This way the user does not have to bother anymore with verifying the water level of a water tank. For this, a solenoid valve can be used which can turn on or off the flow of water between two pipes. This method is ideal for outdoor plants.
+
+\subsection{Comparison}
+
+From the point of view of the price a solenoid valve is usually more expensive than a water pump. However a single one of it can control the irrigation of many outdoor plants. A water pump is much cheaper,  but for each plant a separate pump must be bought which increases the total cost.
+
+From a functional point of view, the flow rate cannot be configured for a solenoid valve. It just enables or disables the flow of water between two pipes. This way, unless the designer knows how to decrease the pressure in the output pipe (maybe programatically), the valve cannot be used for indoor plants, because of the too much quantity of water. Therefore it would serve a better purpose for outdoor plants where an overshoot would not cause unpleasant moments to the user.
+
+The speed of a water pump can be set programatically therefore it can be used for a more refined controller.
+
+
+
+\section{Communication interface}
+
+The type of the communication interface greatly defines the optimal components that should be used.
+
+\subsection{Local configuration}
+
+If the system should be configured by buttons, potentiometers and other circuit components which requires the user to be present physically, one should choose a microcontroller which:
+
+\begin{enumerate}
+ \item has enough analog pins and/or digital pins
+ \item costs the less
+\end{enumerate}
+
+
+
+\subsection{Wi-Fi communication}
+
+For wireless communication the approaches differ by the place the web server code is uploaded.
+
+\subsubsection{Microcontroller + Wi-Fi module + AT commands}
+
+One could use any microcontroller which supports serial communication for this approach. In this case a Wi-Fi module is required (e.g. ESP8266) which can communicate through the serial port. The AT firmware is designed for the ESP8266 chip, and it allows the microcontroller to perform a wast number of operations. The advantage of this approach is that the Wi-Fi module is ready for use, and doesn't have to be programmed. This disadvantage is that the commands are limited. For example to detect in the microcontroller which endpoint was called, one must parse the data received through the serial port byte-by-byte.
+
+\subsubsection{Microcontroller + Wi-Fi module + Custom firmware}
+
+This approach is similar to the previous one, with the difference that the designer uploads a custom firmware to the Wi-Fi module. This way the designer can exploit all the functionalities of the module. However it requires double amount of time to implement the communication between the two components.
+
+
+\subsubsection{Microcontroller with integrated Wi-Fi module}
+
+One could use a microcontroller which has an integrated Wi-Fi receiver and transmitter. Such microcontroller is the NodeMCU. This way the designer can use a higher level API for providing HTTP endpoints (compared to the first approach) and also the server speed is increased because of the lack of serial communication. Therefore all the network capabilities can be used, and the development time is also reduced (compared to the second approach) because all the logic can be programmed into a single chip.
+
+A disadvantage might be that the NodeMCU has only a single analog input.
+
+\subsubsection{Additional notes for Wi-Fi module based implementation}
+
+The ESP8266 works on 3.3V voltage level. Therefore voltage level shifters are needed for its VIN, RX and TX pins in order to work with 5V level circuits, like the Arduino Mega. Moreover the Arduino cannot supply sufficient current to power it on , therefore the VIN must be connected to the external power source.
+
+This can provide some unfortunate moments for the designer after the realization that more components must be bought and interconnected. However one can buy the so called Wi-Fi shields, which can be placed directly on the microcontroller without any additional configuration. The disadvantage of this method is that the shield may not provide access to some important pins of the microcontroller.
+
+
+
+
+\subsection{Bluetooth communication}
+
+Bluetooth communication can also be considered. The main disadvantages compared to the Wi-Fi solution is that it reduces the communication range, and the client must pair its device with the system.
+
+
+
+
+
+
+
+\section{Moisture sensor calibration}
+
+Considering a linear capacitive moisture sensor the following approaches can be taken.
+
+\subsection{Measuring the extreme values}
+
+Being the sensor linear, one could measure the moisture level when the soil of the plant is totally dry and when it's totally wet. Any sensor reading will be in this interval, thus the user can specify a desired percentage of the moisture level.
+
+The disadvantage of this approach is that the voltage readings  highly depend on the volume and the composition of the soil. Therefore for each plant this calibration must be done individually.
+
+
+\subsection{Predicting volumetric water content}
+
+Another approach is to find the linear function which maps the voltage readings to the ration between the volume of the water and the volume of the soil. This way the calibration is down per types of soils and not per plants. Moreover the volume of the soil would not affect the results.
+
+This approach is more time consuming, but the accuracy is greater. More details can be found in \cite{Hrisko20}.

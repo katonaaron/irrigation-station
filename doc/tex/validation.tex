@@ -1,0 +1,17 @@
+\chapter{Testing and validation}
+
+Before the development I tested each component to learn about how they work and how can I use them in the project. This reasearch process required a significant amount of time, especially for the ESP8266 Wi-Fi modules, for which I had to understand the flashing process. Below are enumerated the design decisions I took and the questions I had.
+
+Although having a spare NodeMCU, an Arduino Mega was chosen for the microcontroller. The initial plan was to support multiple plants, which required multiple analog pins, but only one was accessible by the NodeMCU. However by using a multiplexer for the analog input or using an operational amplifier for controlling the pump, this limitation would have been resolved thus I could have embraced all the benefits of writing directly the code to the ESP8266.
+
+By not choosing the NodeMCU additional questions were raised. I needed to decide whether to use the ESP-01 Wi-Fi module which required voltage level shifters and therefore additional soldering, or to use the DoIt ESP-13 Wi-Fi shield which handles all of these problems, but in exchange, it does not provide acces to the VIN and AREF ports. I chose the solution which can be executed the fastest. I soldered to sockets to the Wi-Fi shield. This way I can connect this two pins with regular jumper wires.
+
+Another decision was that I used the AT firmware on the ESP module. At first I thought about writing my own firmware. Then I realized that it requires too much time, because this way I must implement my own data sending protocol through the serial port. So I chose the AT commands. But it was not simple to use them. Fortunately, the ``WiFiEsp'' library provides a higher level API for a few operations with the module. The only thing left for me was to parse the HTTP request byte-by-byte to get the request type and the endpoint. Then I could implement regularly the endpoints, like if I used the NodeMCU.
+
+Another significant change in plan was the choice of the water pump. Initially the pump I used worked on 5 volts, and it also changed polarity while rotating. However all the tutorials on the internet connected the pump to a simple relay instead of a H-bridge. Therefore I calmly connected the pump to the arduino (without using a relay), which was fried a few seconds later. After that I used the L298n motor driver. But because of the operating voltage of the pump was 5V, the motor driver overheated. At this moment I bought a new pump which works on 12V.
+
+Most of the decisions was taken before or during the development. After each module was implemented I tested for correct behavior. The first functional state of the system corresponds to the final state.
+
+\section{Endpoint testing}
+
+The endpoints were tested by using the Postman program. Through this, one can send HTTP requests of all types, with or without body, and see the responses. This way was verified the behavior and the proper reaction of the system.

@@ -1,0 +1,77 @@
+\section{Software}
+
+The main program is defined in \verb|controller.ino|. In the \verb|setup()| function it displays the ``SE'' characters on the seven segment display, and calls the setup functions of each module. It has a \textbf{suspend flag}. When it is set, the loop function immediately returns, thus the program not executing anything anymore.
+
+To achieve parallelism, the ``Timer.h'' library was used, which calls the given methods after the specified duration, by using the \verb|millis()| function. This library was used for handling the timings of the moisture controller presented in section \ref{sec:control_fsm}. Its implementation can be found in the \verb|processing.ino| file.
+
+The \verb|config.h| file contains the constants of the program and also the application parameters. The \verb|Settings| data structure contains those parameters that can be modified by the user. The settings are read from the EEPROM and updated every time the field values change. The \verb|settings.ino| file implements the saving, loading and printing of this structure.
+
+The \verb|moisture_sensor.ino| file handles the operations on the capacitive  soil moisture level sensor. It provides functions for reading the sensor value, handles the conversion  between the sensor value, the voltage value and the percentage. It also provides two functions for updating the two extreme sensor values.
+
+The \verb|interrupts.ino| file configures the two buttons to trigger the interrupts. It also implements the interrupt service routines of them. These functions need to apply debouncing first, then they call the previously mentioned functions for updating the extreme values.
+
+The \verb|pump.ino| file contains the functions for handling hte pump operations.
+
+The \verb|display.ino| file handles the printing of characters and numbers to the seven segment displays. It contains a lookup table for all printable characters.
+
+The \verb|error.h| contains an enum with all the system errors and their string representations. These are the errors that can be shown on the seven segment displays. The `\verb|error.ino| file contains the function which displays an error on the display, then it sets the \textit{suspend flag}.
+
+The ``WiFiEsp.h'' library was used for the serial communication with the ESP8266 module, using the AT commands. In \verb|wifi.ino| functions are implemented which handle the setup of the module, the printing of the Wi-Fi data and the receiving of the clients. The latter function is called in the \verb|loop()| method of the main program. When the ESP module opens a socket this function receives a client object and reads the HTTP request character-by-character. The finite-state-machine described in \ref{sec:http_fsm} was used for parsing the input and saving the HTTP request type and the endpoint.
+
+The requests are handled by the functions of the \verb|endpoints.ino| file. The \verb|handleRequest()| function receives a client, the request type and the endpoint, and routes it to the other methods. These function each implement and endpoint individually. The list of the endpoints and the corresponding functions can be seen in table \ref{tab:enpoints}. To send an receive JSON messages, the ``ArduinoJson.h'' library was used.
+
+In case of an unparsable input, an inexisting endpoint, an unavailable request type or invalid input the corresponding HTTP responses are returned: BAD REQUEST, NOT FOUND, METHOD NOT ALLOWED, UNPROCESSABLE ENTITY. If the functions are executed correctly, the OK response is returned.
+
+The \verb|http.h| header contains the HTTP status codes which are used in the program with their string representation. The \verb|http.ino| file implements methods for sending HTTP responses
+
+The \verb|util.h| file contains the utility functions, such as \verb|average()|, which calculates the average of returned values when calling a function repeated times. This is used for reading the sensor data.
+
+\subsubsection{Debugging}
+
+For debugging, the program prints values to its main serial port, which is connected to the USB port. When the program starts, it prints the saved configuration values and also other data related to the wifi connection, such as its local ip address.
+
+
+\begin{table}[ht]
+ \centering
+ \begin{tabular}{| l | c | l | p{0.55\linewidth} |} 
+    \hline
+    Function & Request & Endpoint & Action \\ [0.5ex] 
+    \hline\hline
+    getRoot & GET & / & Show all endpoints\\ 
+    \hline
+    getSensor & GET & /sensor & Show the parameters related to the sensor readings:
+    \begin{itemize}
+     \item The range of valid values: min and max
+     \item The extreme values: dry and wet
+     \item The threshold percentage
+    \end{itemize}\\ 
+    \hline
+    updateSensor & PATCH & /sensor & Update the parameters. Each specified input value is validated. The HTTP response tells if the execution was a success\\ 
+    \hline
+    getSensor & GET & /moisture & Show the current moisture value in multiple formats:
+    \begin{itemize}
+     \item Raw sensor reading
+     \item Voltage 
+     \item Percentage
+    \end{itemize}\\ 
+    \hline
+    getTiming & GET & /timing & Show the parameters related to the timing:
+    \begin{itemize}
+     \item sensorReactionTime - parameter of the controller
+     \item pumpingTime - parameter of the controller
+     \item delayBetweenChecks - parameter of the controller
+     \item displayRefreshPeriod - specifies the waiting period after updating the percentage on the 7-segment display
+    \end{itemize}\\ 
+    \hline
+    updateTiming & PATCH & /timing & Update the parameters. Each specified input value is validated. The HTTP response tells if the execution was a success\\ [1ex] 
+    \hline
+ \end{tabular}
+ \caption{The endpoints of the web server and the corresponding functions which implement them}
+ \label{tab:enpoints}
+\end{table}
+
+
+
+
+
+

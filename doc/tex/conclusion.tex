@@ -1,0 +1,37 @@
+\chapter{Conclusion}
+
+
+
+
+\section{Ideas for a new design}
+
+Through the experiences gained during the development I obtained more insights on what design decisions would have been better for solving the same problem.
+
+For a new design I would consider:
+
+\begin{itemize}
+ \item Operational amplifiers for controlling the moisture levels
+ \item NodeMCU for the Wireless communication, application logic and for supplying the reference voltages for the operational amplifiers
+ \item Master-slave communication which allows to control more plants than the number of pins on the microcontroller without the need of using multiplexers.
+\end{itemize}
+
+
+\section{Ideas for improvements}
+
+The following improvements would benefit both the new and the current design:
+
+\begin{itemize}
+ \item Using the calibration method presented in \cite{Hrisko20} to compute the volumetric water content
+ \item Using an SD card to store the configuration data and the sensor readings. Thus having a history of moisture levels which could be queried through a new endpoint.
+ \item Using a water level sensor to stop pumping when the water tank is empty, and instead alert the user.
+ \item Creating a client interface: mobile or web.
+\end{itemize}
+
+
+\section{Conclusions}
+
+This project was a great opportunity to apply in practice the concepts I learned at the university \cite{Danescu2018} and to discover more components and techniques.
+
+I did not take the best design decision when I did not choose the NodeMCU and the operational amplifier. But that only provided disadvantage during the initial development. Now the program can be easily extended by implementing the function of a new endpoint and calling it in the routing method.
+
+The purpose was fulfilled. The end result is a fully-functioning automatized irrigation station which can be configured using a RESTful API. It solves the real life problem of irrigating a plant according to its needs. This solution can help anybody who needs this kind of automation in his/her plant's life.
